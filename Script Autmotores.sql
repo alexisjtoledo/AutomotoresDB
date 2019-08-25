@@ -1,39 +1,87 @@
--- Creaci�n de DB
-create database Automotores
-go
---- Selecci�n de la DB
-use Automotores
+-- Creacion de DB
+CREATE DATABASE Automotores
+GO
+--- Seleccion de la DB
+USE Automotores
 
 -- Comenzamos creando las Tablas Auxiliares
-create table marcas_vehiculos (
-	id_marca int identity (1,1) NOT NULL,
-	nombre varchar(50)
-	constraint pk_id_marca primary key (id_marca), 
+CREATE TABLE marcas_vehiculos (
+	id_marca INT IDENTITY (1,1) NOT NULL,
+	nombre VARCHAR(50),
+	CONSTRAINT pk_id_marca PRIMARY KEY (id_marca), 
 )
-create table modelos_vehiculos (
-	id_modelo int identity (1,1) NOT NULL,
-	nombre varchar(50),
+CREATE TABLE modelos_vehiculos (
+	id_modelo INT IDENTITY (1,1) NOT NULL,
+	nombre VARCHAR(50),
 	id_marca int,
-	constraint pk_id_modelo primary key (id_modelo),
-	constraint fk_id_marca foreign key (id_marca) references marcas_vehiculos(id_marca)
+	CONSTRAINT pk_id_modelo PRIMARY KEY (id_modelo),
+	CONSTRAINT fk_id_marca FOREIGN KEY (id_marca) REFERENCES marcas_vehiculos(id_marca)
 )
-create table tipos_productos (
-    id_tipoprod int identity (1,1) NOT NULL,
-    nombre varchar(50),
-    constraint pk_id_tipoprod primary key (id_tipoprod)
+CREATE TABLE tipos_productos (
+    id_tipoprod INT IDENTITY (1,1) NOT NULL,
+    nombre VARCHAR(50),
+    CONSTRAINT pk_id_tipoprod PRIMARY KEY (id_tipoprod)
 )
-create table tipos_factura(
-    id_tipofact int identity (1,1) not null, 
+CREATE TABLE tipos_factura (
+    id_tipofact INT IDENTITY (1,1) NOT NULL,
     nombre VARCHAR(50),
     CONSTRAINT pk_id_tipofact PRIMARY KEY (id_tipofact)
 )
-CREATE TABLE cargos(
+CREATE TABLE cargos (
     id_cargo INT IDENTITY (1,1) NOT NULL,
     nombre VARCHAR(50),
     CONSTRAINT pk_id_cargo PRIMARY KEY (id_cargo)
 )
-CREATE TABLE tipos_clientes(
+CREATE TABLE tipos_clientes (
     id_tipocli INT IDENTITY (1,1) NOT NULL,
     nombre VARCHAR(50)
     CONSTRAINT pk_id_tipocli PRIMARY KEY (id_tipocli)
+)
+CREATE TABLE generos (
+    id_genero INT IDENTITY(1,1) NOT NULL,
+    nombre VARCHAR(50),
+    CONSTRAINT pk_id_genero PRIMARY KEY (id_genero)
+)
+CREATE TABLE tipos_documentos (
+    id_tipodoc INT IDENTITY(1,1) NOT NULL,
+    nombre VARCHAR(50),
+    CONSTRAINT pk_id_tipodoc PRIMARY KEY (id_tipodoc)
+)
+CREATE TABLE paises (
+    id_pais INT IDENTITY(1,1) NOT NULL,
+    nombre VARCHAR(50),
+    CONSTRAINT pk_id_paises PRIMARY KEY (id_paises)
+)
+CREATE TABLE provincias (
+    id_provincia INT IDENTITY(1,1) NOT NULL,
+    nombre VARCHAR(50),
+    id_pais int,
+    CONSTRAINT pk_id_provincia PRIMARY KEY (id_provincia),
+    CONSTRAINT fk_id_pais FOREIGN KEY (id_pais) REFERENCES paises(id_pais),
+)
+CREATE TABLE localidades (
+    id_localidad INT IDENTITY (1,1) NOT NULL,
+    nombre VARCHAR(50),
+    id_provincia int,
+    CONSTRAINT pk_id_localidad PRIMARY KEY (id_localidad),
+    CONSTRAINT fk_id_provincia FOREIGN KEY (id_provincia) REFERENCES provincias(id_provincia)
+)
+CREATE TABLE barrios (
+    id_barrio INT IDENTITY (1,1) NOT NULL,
+    nombre VARCHAR(50),
+    id_localidad int,
+    CONSTRAINT pk_id_barrio PRIMARY KEY (id_barrio),
+    CONSTRAINT fk_id_localidad FOREIGN KEY (id_localidad) REFERENCES localidades(id_localidad)
+)
+CREATE TABLE formas_pago (
+    id_formapago INT IDENTITY (1,1) NOT NULL,
+    nombre VARCHAR(50),
+    interes int,
+    cuotas int,
+    CONSTRAINT pk_id_formapago PRIMARY KEY (id_formapago)
+)
+CREATE TABLE tipos_contacto (
+    id_tipocont INT IDENTITY (1,1) NOT NULL,
+    nombre VARCHAR(50),
+    CONSTRAINT pk_id_tipocont PRIMARY KEY (id_tipocont)
 )
