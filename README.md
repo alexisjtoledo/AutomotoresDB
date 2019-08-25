@@ -1,2 +1,2 @@
 # AutomotoresDB
-Base de datos TIP proyecto automotores (Laboratorio II)
+Base de datos TPI proyecto automotores (Laboratorio II - Grupo 5)
