@@ -1,6 +1,6 @@
--- Creación de DB
+-- Creacion de DB
 create database Automotores
 go
---- Selección de la DB
+--- Seleccion de la DB
 use Automotores
 
