@@ -171,3 +171,46 @@ CREATE TABLE contactos (
     CONSTRAINT fk_id_persona FOREIGN KEY (id_persona) REFERENCES personas(id_persona),
     CONSTRAINT fk_id_tipocont FOREIGN KEY (id_tipocont) REFERENCES tipos_contacto(id_tipocont)
 )
+CREATE TABLE facturas (
+    id_factura INT IDENTITY (1,1) NOT NULL,
+    id_cliente INT,
+    id_empleado INT,
+    fecha DATETIME,
+    observaciones VARCHAR(150),
+    id_tipofact INT,
+    id_ordenpedido INT,
+    descuento INT,
+    CONSTRAINT pk_id_factura PRIMARY KEY (id_factura),
+    CONSTRAINT fk_id_cliente FOREIGN KEY (id_cliente) REFERENCES clientes(id_cliente),
+    CONSTRAINT fk_id_empleado FOREIGN KEY (id_empleado) REFERENCES empleados(id_empleado),
+    CONSTRAINT fk_id_tipofact FOREIGN KEY (id_tipofact) REFERENCES tipos_factura(id_tipofact),
+    CONSTRAINT fk_id_ordenpedido FOREIGN KEY (id_ordenpedido) REFERENCES ordenes_pedido(id_ordenpedido)
+)
+CREATE TABLE detalles_facturas (
+    id_detallefact INT IDENTITY (1,1) NOT NULL,
+    id_factura INT,
+    id_producto INT,
+    cantidad INT,
+    precio_unitario INT,
+    CONSTRAINT pk_id_detallefact PRIMARY KEY (id_detallefact),
+    CONSTRAINT fk_id_factura FOREIGN KEY (id_factura) REFERENCES facturas(id_factura),
+    CONSTRAINT fk_id_producto FOREIGN KEY (id_producto) REFERENCES productos(id_producto)
+)
+CREATE TABLE formaspago_x_factura (
+    id_formxfact INT IDENTITY (1,1) NOT NULL,
+    id_factura INT,
+    id_formapago INT,
+    monto INT,
+    nro_cuota INT,
+    CONSTRAINT pk_id_formxfact PRIMARY KEY (id_formxfact),
+    CONSTRAINT fk_id_factura FOREIGN KEY (id_factura) REFERENCES facturas(id_factura),
+    CONSTRAINT fk_id_formapago FOREIGN KEY (id_formapago) REFERENCES formas_pago(id_formapago)
+)
+CREATE TABLE historial_precios (
+    id_historial INT IDENTITY (1,1) NOT NULL,
+    id_producto INT,
+    fecha_alta DATETIME,
+    precio INT,
+    CONSTRAINT pk_id_historial PRIMARY KEY (id_historial),
+    CONSTRAINT fk_id_producto FOREIGN KEY (id_producto) REFERENCES productos(id_producto)
+)
