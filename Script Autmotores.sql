@@ -4,43 +4,43 @@ GO
 --- Seleccion de la DB
 USE Automotores
 -- Comenzamos creando las Tablas Auxiliares
-CREATE TABLE marcas_vehiculos
+CREATE TABLE marcas
 (
     id_marca INT IDENTITY (1,1) NOT NULL,
     nombre VARCHAR(50),
     CONSTRAINT pk_id_marca PRIMARY KEY (id_marca),
 )
-CREATE TABLE modelos_vehiculos
+CREATE TABLE modelos
 (
     id_modelo INT IDENTITY (1,1) NOT NULL,
     nombre VARCHAR(50),
     id_marca int,
     CONSTRAINT pk_id_modelo PRIMARY KEY (id_modelo),
-    CONSTRAINT fk_id_marca FOREIGN KEY (id_marca) REFERENCES marcas_vehiculos(id_marca)
+    CONSTRAINT fk_id_marca FOREIGN KEY (id_marca) REFERENCES marcas(id_marca)
 )
-CREATE TABLE tipos_productos
+CREATE TABLE tipos_producto
 (
-    id_tipoprod INT IDENTITY (1,1) NOT NULL,
+    id_tipo_producto INT IDENTITY (1,1) NOT NULL,
     nombre VARCHAR(50),
-    CONSTRAINT pk_id_tipoprod PRIMARY KEY (id_tipoprod)
+    CONSTRAINT pk_id_tipo_producto PRIMARY KEY (id_tipo_producto)
 )
 CREATE TABLE tipos_factura
 (
-    id_tipofact INT IDENTITY (1,1) NOT NULL,
+    id_tipo_factura INT IDENTITY (1,1) NOT NULL,
     nombre VARCHAR(50),
-    CONSTRAINT pk_id_tipofact PRIMARY KEY (id_tipofact)
+    CONSTRAINT pk_id_tipo_factura PRIMARY KEY (id_tipo_factura)
 )
-CREATE TABLE cargos
+CREATE TABLE cargos_empleados
 (
-    id_cargo INT IDENTITY (1,1) NOT NULL,
+    id_cargo_empleado INT IDENTITY (1,1) NOT NULL,
     nombre VARCHAR(50),
-    CONSTRAINT pk_id_cargo PRIMARY KEY (id_cargo)
+    CONSTRAINT pk_id_cargo_empleado PRIMARY KEY (id_cargo_empleado)
 )
 CREATE TABLE tipos_clientes
 (
-    id_tipocli INT IDENTITY (1,1) NOT NULL,
+    id_tipo_cliente INT IDENTITY (1,1) NOT NULL,
     nombre VARCHAR(50)
-        CONSTRAINT pk_id_tipocli PRIMARY KEY (id_tipocli)
+        CONSTRAINT pk_id_tipo_cliente PRIMARY KEY (id_tipo_cliente)
 )
 CREATE TABLE generos
 (
@@ -50,9 +50,9 @@ CREATE TABLE generos
 )
 CREATE TABLE tipos_documentos
 (
-    id_tipodoc INT IDENTITY(1,1) NOT NULL,
+    id_tipo_doc INT IDENTITY(1,1) NOT NULL,
     nombre VARCHAR(50),
-    CONSTRAINT pk_id_tipodoc PRIMARY KEY (id_tipodoc)
+    CONSTRAINT pk_id_tipo_doc PRIMARY KEY (id_tipo_doc)
 )
 CREATE TABLE paises
 (
@@ -86,17 +86,17 @@ CREATE TABLE barrios
 )
 CREATE TABLE formas_pago
 (
-    id_formapago INT IDENTITY (1,1) NOT NULL,
+    id_forma_pago INT IDENTITY (1,1) NOT NULL,
     nombre VARCHAR(50),
     interes INT,
     cuotas INT,
-    CONSTRAINT pk_id_formapago PRIMARY KEY (id_formapago)
+    CONSTRAINT pk_id_forma_pago PRIMARY KEY (id_forma_pago)
 )
 CREATE TABLE tipos_contacto
 (
-    id_tipocont INT IDENTITY (1,1) NOT NULL,
+    id_tipo_contacto INT IDENTITY (1,1) NOT NULL,
     nombre VARCHAR(50),
-    CONSTRAINT pk_id_tipocont PRIMARY KEY (id_tipocont)
+    CONSTRAINT pk_id_tipo_contacto PRIMARY KEY (id_tipo_contacto)
 )
 -- Comenzamos a crear las tablas principales
 CREATE TABLE personas
@@ -104,77 +104,75 @@ CREATE TABLE personas
     id_persona INT IDENTITY (1,1) NOT NULL,
     nombre VARCHAR(50),
     apellido VARCHAR(50),
-    id_tipodoc INT,
+    id_tipo_doc INT,
     nro_documento INT,
     id_genero INT,
     fecha_nacimiento DATETIME,
     CONSTRAINT pk_id_persona PRIMARY KEY (id_persona),
-    CONSTRAINT fk_id_tipodoc FOREIGN KEY (id_tipodoc) REFERENCES tipos_documentos(id_tipodoc),
+    CONSTRAINT fk_id_tipo_documento FOREIGN KEY (id_tipo_doc) REFERENCES tipos_documentos(id_tipo_doc),
     CONSTRAINT fk_id_genero FOREIGN KEY (id_genero) REFERENCES generos(id_genero)
 )
 CREATE TABLE clientes
 (
     id_cliente INT IDENTITY (1,1) NOT NULL,
-    id_tipocli INT,
+    id_tipo_cliente INT,
     fecha_alta DATETIME,
     id_persona INT,
     CONSTRAINT pk_id_cliente PRIMARY KEY (id_cliente),
-    CONSTRAINT fk_id_tipocli FOREIGN KEY (id_tipocli) REFERENCES tipos_clientes(id_tipocli),
+    CONSTRAINT fk_id_tipo_cliente FOREIGN KEY (id_tipo_cliente) REFERENCES tipos_clientes(id_tipo_cliente),
     CONSTRAINT fk_id_persona FOREIGN KEY (id_persona) REFERENCES personas(id_persona)
 )
 CREATE TABLE empleados
 (
     id_empleado INT IDENTITY (1,1) NOT NULL,
     id_persona INT,
-    id_cargo INT,
+    id_cargo_empleado INT,
     CONSTRAINT pk_id_empleado PRIMARY KEY (id_empleado),
     CONSTRAINT fk_id_persona2 FOREIGN KEY (id_persona) REFERENCES personas(id_persona),
-    CONSTRAINT fk_id_cargo FOREIGN KEY (id_cargo) REFERENCES cargos(id_cargo)
+    CONSTRAINT fk_id_cargo_empleado FOREIGN KEY (id_cargo_empleado) REFERENCES cargos_empleados(id_cargo_empleado)
 )
 CREATE TABLE productos
 (
     id_producto INT IDENTITY (1,1) NOT NULL,
     nombre VARCHAR(50),
     precio INT,
-    id_tipoprod INT,
-    id_paisorigen INT,
+    id_tipo_producto INT,
     color VARCHAR(20),
     detalles VARCHAR(100),
     id_modelo INT,
     stock_minimo INT,
     stock_actual INT,
     CONSTRAINT pk_id_producto PRIMARY KEY (id_producto),
-    CONSTRAINT fk_id_tipoprod FOREIGN KEY (id_tipoprod) REFERENCES tipos_productos(id_tipoprod),
-    CONSTRAINT fk_id_paisorigen FOREIGN KEY (id_paisorigen) REFERENCES paises(id_pais),
+    CONSTRAINT fk_id_tipo_producto FOREIGN KEY (id_tipo_producto) REFERENCES tipos_producto(id_tipo_producto),
     CONSTRAINT fk_id_modelo FOREIGN KEY (id_modelo) REFERENCES modelos_vehiculos(id_modelo)
 )
 CREATE TABLE ordenes_pedido
 (
-    id_ordenpedido INT IDENTITY (1,1) NOT NULL,
+    num_orden INT IDENTITY (1,1) NOT NULL,
     fecha_pedido DATETIME,
     fecha_entrega DATETIME,
     id_cliente INT,
     id_empleado INT,
     observaciones VARCHAR(150),
-    CONSTRAINT pk_id_ordenpedido PRIMARY KEY (id_ordenpedido),
+    CONSTRAINT pk_id_num_orden PRIMARY KEY (num_orden),
     CONSTRAINT fk_id_cliente FOREIGN KEY (id_cliente) REFERENCES clientes(id_cliente),
     CONSTRAINT fk_id_empleado FOREIGN KEY (id_empleado) REFERENCES empleados(id_empleado)
 )
 CREATE TABLE detalle_orden_pedido
 (
-    id_detalle_ordenpedido INT IDENTITY (1,1) NOT NULL,
+    id_detalle_pedido INT IDENTITY (1,1) NOT NULL,
     id_producto INT,
     cant_pedida INT,
     precio_unitario INT,
-    id_ordenpedido INT,
-    CONSTRAINT pk_id_detalle_ordenpedido PRIMARY KEY (id_detalle_ordenpedido),
+    num_orden INT,
+    CONSTRAINT pk_id_detalle_pedido PRIMARY KEY (id_detalle_pedido),
     CONSTRAINT fk_id_producto FOREIGN KEY (id_producto) REFERENCES productos(id_producto),
-    CONSTRAINT fk_id_ordenpedido FOREIGN KEY (id_ordenpedido) REFERENCES ordenes_pedido(id_ordenpedido)
+    CONSTRAINT fk_num_orden FOREIGN KEY (num_orden) REFERENCES ordenes_pedido(num_orden)
 )
 CREATE TABLE direcciones
 (
     id_direccion INT IDENTITY (1,1) NOT NULL,
-    nro_calle INT,
+    num_calle INT,
     nombre_calle VARCHAR(50),
     id_barrio INT,
     id_persona INT,
@@ -187,54 +185,54 @@ CREATE TABLE contactos
     id_contacto INT IDENTITY (1,1) NOT NULL,
     id_persona INT,
     contacto VARCHAR(50),
-    id_tipocont INT,
+    id_tipo_contacto INT,
     CONSTRAINT pk_id_contacto PRIMARY KEY (id_contacto),
     CONSTRAINT fk_id_persona4 FOREIGN KEY (id_persona) REFERENCES personas(id_persona),
-    CONSTRAINT fk_id_tipocont FOREIGN KEY (id_tipocont) REFERENCES tipos_contacto(id_tipocont)
+    CONSTRAINT fk_id_tipo_contacto FOREIGN KEY (id_tipo_contacto) REFERENCES tipos_contacto(id_tipo_contacto)
 )
 CREATE TABLE facturas
 (
-    id_factura INT IDENTITY (1,1) NOT NULL,
+    num_factura INT IDENTITY (1,1) NOT NULL,
     id_cliente INT,
     id_empleado INT,
-    fecha DATETIME,
+    fecha_factura DATETIME,
     observaciones VARCHAR(150),
-    id_tipofact INT,
-    id_ordenpedido INT,
+    id_tipo_factura INT,
+    num_orden INT,
     descuento INT,
-    CONSTRAINT pk_id_factura PRIMARY KEY (id_factura),
+    CONSTRAINT pk_num_factura PRIMARY KEY (num_factura),
     CONSTRAINT fk_id_cliente2 FOREIGN KEY (id_cliente) REFERENCES clientes(id_cliente),
     CONSTRAINT fk_id_empleado2 FOREIGN KEY (id_empleado) REFERENCES empleados(id_empleado),
-    CONSTRAINT fk_id_tipofact FOREIGN KEY (id_tipofact) REFERENCES tipos_factura(id_tipofact),
-    CONSTRAINT fk_id_ordenpedido2 FOREIGN KEY (id_ordenpedido) REFERENCES ordenes_pedido(id_ordenpedido)
+    CONSTRAINT fk_id_tipofact FOREIGN KEY (id_tipo_factura) REFERENCES tipos_factura(id_tipo_factura),
+    CONSTRAINT fk_num_orden2 FOREIGN KEY (num_orden) REFERENCES ordenes_pedido(num_orden)
 )
 CREATE TABLE detalles_facturas
 (
-    id_detallefact INT IDENTITY (1,1) NOT NULL,
-    id_factura INT,
+    id_detalle_factura INT IDENTITY (1,1) NOT NULL,
+    num_factura INT,
     id_producto INT,
     cantidad INT,
     precio_unitario INT,
-    CONSTRAINT pk_id_detallefact PRIMARY KEY (id_detallefact),
-    CONSTRAINT fk_id_factura FOREIGN KEY (id_factura) REFERENCES facturas(id_factura),
+    CONSTRAINT pk_id_detalle_factura PRIMARY KEY (id_detalle_factura),
+    CONSTRAINT fk_num_factura FOREIGN KEY (num_factura) REFERENCES facturas(num_factura),
     CONSTRAINT fk_id_producto2 FOREIGN KEY (id_producto) REFERENCES productos(id_producto)
 )
 CREATE TABLE formaspago_x_factura
 (
     id_formxfact INT IDENTITY (1,1) NOT NULL,
-    id_factura INT,
-    id_formapago INT,
+    num_factura INT,
+    id_forma_pago INT,
     monto INT,
     nro_cuota INT,
     CONSTRAINT pk_id_formxfact PRIMARY KEY (id_formxfact),
-    CONSTRAINT fk_id_factura2 FOREIGN KEY (id_factura) REFERENCES facturas(id_factura),
-    CONSTRAINT fk_id_formapago FOREIGN KEY (id_formapago) REFERENCES formas_pago(id_formapago)
+    CONSTRAINT fk_num_factura2 FOREIGN KEY (num_factura) REFERENCES facturas(num_factura),
+    CONSTRAINT fk_id_formapago FOREIGN KEY (id_forma_pago) REFERENCES formas_pago(id_forma_pago)
 )
 CREATE TABLE historial_precios
 (
     id_historial INT IDENTITY (1,1) NOT NULL,
     id_producto INT,
-    fecha_alta DATETIME,
+    fecha_ingreso DATETIME,
     precio INT,
     CONSTRAINT pk_id_historial PRIMARY KEY (id_historial),
     CONSTRAINT fk_id_producto3 FOREIGN KEY (id_producto) REFERENCES productos(id_producto)
